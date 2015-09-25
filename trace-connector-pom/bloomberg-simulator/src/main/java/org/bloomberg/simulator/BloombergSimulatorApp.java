@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 import org.quickfixj.jmx.JmxExporter;
 
+import quickfix.Acceptor;
 import quickfix.ConfigError;
 import quickfix.DefaultMessageFactory;
 import quickfix.FileLogFactory;
@@ -18,6 +19,7 @@ import quickfix.Session;
 import quickfix.SessionID;
 import quickfix.SessionNotFound;
 import quickfix.SessionSettings;
+import quickfix.SocketAcceptor;
 import quickfix.SocketInitiator;
 import quickfix.Message.Header;
 import quickfix.field.BeginString;
@@ -39,17 +41,17 @@ public class BloombergSimulatorApp
 
 	private static void initializeBloombergInitiator() {
 		SessionSettings settings=null;
-		Initiator bbergInitiator=null;
+		Acceptor bbergInitiator=null;
 		try {
 			
-			settings = new SessionSettings("bloomberg_initiator.properties");
+			settings = new SessionSettings("bloomberg_acceptor.properties");
 		
 	    MessageStoreFactory storeFactory = new FileStoreFactory(settings);
 	    LogFactory logFactory = new FileLogFactory(settings);
 	    MessageFactory messageFactory = new DefaultMessageFactory();
 	
 	    BloombergInitiatorApp bbergInitiatorApp = new BloombergInitiatorApp();
-	    bbergInitiator = new SocketInitiator(bbergInitiatorApp, storeFactory, settings, logFactory, messageFactory);
+	    bbergInitiator = new SocketAcceptor(bbergInitiatorApp, storeFactory, settings, logFactory, messageFactory);
 		
 		JmxExporter exporter = new JmxExporter();
         exporter.register(bbergInitiator);				  
